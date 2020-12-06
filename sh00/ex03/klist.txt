@@ -1,0 +1,5 @@
+Credentials cache: API:29524C2D-A46C-4A27-9384-CD2816CEA265
+        Principal: flwang@42ROMA.IT
+
+  Issued                Expires               Principal
+Oct 19 14:16:25 2020  Oct 20 00:16:25 2020  krbtgt/42ROMA.IT@42ROMA.IT
