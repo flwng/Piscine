@@ -3,84 +3,83 @@
 /*                                                        :::      ::::::::   */
 /*   ft_convert_base.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: usavoia <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: flwang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/05 16:00:28 by usavoia           #+#    #+#             */
-/*   Updated: 2020/11/05 19:04:49 by usavoia          ###   ########.fr       */
+/*   Created: 2020/11/11 16:59:49 by flwang            #+#    #+#             */
+/*   Updated: 2020/11/11 16:59:50 by flwang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-int		ft_atoi_base(char *str, char *base);
-int		check_base(char *base);
-int		ft_strlen(char *str);
+int		nbr_size(long long nbr, int base_len);
+int		is_valid(char *base, int *len);
+int		ft_is_whitespace(char c);
 
-void	ft_putnbr(int nb, char *arr, unsigned int len, char **res)
+int		atoi_b(char *str, char *base, int base_len)
 {
-	unsigned int nbr_unsigned;
+	int ret;
+	int sign;
+	int idx;
 
-	if (nb < 0)
+	ret = 0;
+	sign = 1;
+	while (ft_is_whitespace(*str))
+		++str;
+	while (*str == '+' || *str == '-')
+		if (*(str++) == '-')
+			sign *= -1;
+	while (*str)
 	{
-		nbr_unsigned = (unsigned int)(-1 * nb);
-		**res = '-';
-		(*res)++;
+		idx = -1;
+		while (++idx < base_len)
+		{
+			if (*str == base[idx])
+				break ;
+		}
+		if (idx == base_len)
+			break ;
+		ret = ret * base_len + (sign * idx);
+		++str;
 	}
-	else
-		nbr_unsigned = (unsigned int)nb;
-	if (nbr_unsigned >= len)
-	{
-		ft_putnbr(nbr_unsigned / len, arr, len, res);
-		ft_putnbr(nbr_unsigned % len, arr, len, res);
-	}
-	else
-	{
-		**res = (arr[nbr_unsigned]);
-		(*res)++;
-	}
+	return (ret);
 }
 
-char	*ft_putnbr_base(int nbr, char *base)
+char	*putnbr_b(int nbr, char *base, int base_len)
 {
-	int		l;
-	int		i;
-	int		tmp;
-	char	*res;
-	char	*tmp_ptr;
+	long long	tmp;
+	char		*ret;
+	int			size;
 
-	res = 0;
-	i = 0;
-	l = ft_strlen(base);
+	if (nbr == 0)
+	{
+		ret = (char*)malloc(2);
+		ret[0] = base[0];
+		ret[1] = 0;
+		return (ret);
+	}
 	tmp = nbr;
-	tmp_ptr = 0;
-	while (tmp > 0)
+	size = nbr_size(tmp, base_len);
+	ret = (char*)malloc(size + 1);
+	ret[size] = 0;
+	if (tmp < 0)
+		tmp *= -1;
+	while (tmp)
 	{
-		tmp /= l;
-		i++;
+		ret[--size] = base[tmp % base_len];
+		tmp /= base_len;
 	}
-	if (l != 0 && l != 1)
-	{
-		if (!(res = malloc((i * (sizeof(char)) + 1))))
-			return (0);
-		tmp_ptr = res;
-		ft_putnbr(nbr, base, l, &tmp_ptr);
-	}
-	return (res);
+	if (nbr < 0)
+		ret[0] = '-';
+	return (ret);
 }
 
 char	*ft_convert_base(char *nbr, char *base_from, char *base_to)
 {
-	int		dec_val;
-	char	*ptr_base_from;
-	char	*ptr_base_to;
-	char	*res;
+	int len_f;
+	int len_t;
 
-	ptr_base_from = base_from;
-	ptr_base_to = base_to;
-	res = 0;
-	if (!(check_base(ptr_base_from)) || !(check_base(ptr_base_to)))
-		return (NULL);
-	dec_val = ft_atoi_base(nbr, ptr_base_from);
-	res = ft_putnbr_base(dec_val, base_to);
-	return (res);
+	if (!is_valid(base_from, &len_f) || !is_valid(base_to, &len_t))
+		return (0);
+	return (putnbr_b(atoi_b(nbr, base_from, len_f), base_to, len_t));
 }

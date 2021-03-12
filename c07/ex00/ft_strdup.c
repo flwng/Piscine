@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aduregon <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: flwang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/03 19:18:19 by aduregon          #+#    #+#             */
-/*   Updated: 2020/11/05 14:47:02 by usavoia          ###   ########.fr       */
+/*   Created: 2020/11/11 16:58:55 by flwang            #+#    #+#             */
+/*   Updated: 2020/11/11 16:59:04 by flwang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,12 @@ char	*ft_strcpy(char *dest, char *src)
 
 char	*ft_strdup(char *src)
 {
-	char *dest;
-	int len;
-	
+	char	*dest;
+	int		len;
+
 	len = ft_strlen(src);
 	if (!(dest = (char*)malloc((len * sizeof(char)) + 1)))
 		return (0);
 	dest = ft_strcpy(dest, src);
-	
 	return (dest);
 }

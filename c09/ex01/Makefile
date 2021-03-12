@@ -1,24 +1,37 @@
-SRCS = srcs/ft_putchar.c srcs/ft_outstr.c srcs_ft_strcmp.c srcs/ft_strlen.c srcs/ft_swap.c
-OBJS = $(SRCS:.c=.o)
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: flwang <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/11/12 20:04:02 by flwang            #+#    #+#              #
+#    Updated: 2020/11/12 20:04:04 by flwang           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-NAME = libft.a
+CFLAGS = -Wall -Wextra -Werror -c
 
-.c.o:
-	${CC} ${CFLAGS} -I includes -c $< -o ${<:.c=.o}
+SRCDIR = srcs
+INCDIR = includes
 
-all: ${NAME}
+TARGET = libft.a
+SOURCES = $(SRCDIR)/ft_putchar.c $(SRCDIR)/ft_swap.c $(SRCDIR)/ft_putstr.c $(SRCDIR)/ft_strlen.c $(SRCDIR)/ft_strcmp.c
+OBJECTS = $(SOURCES:.c=.o)
 
-${NAME}: ${OBJS}
-	ar rc ${NAME} {OBJS}
-	ranlib ${NAME}
+all: $(TARGET)
 
-clean: 
-	rm -f ${OBJS}
+%.o: %.c
+	$(CC) $(CFLAGS) $< -o $@ -I $(INCDIR)
+	
+$(TARGET): $(OBJECTS)
+	ar cr $@ $(OBJECTS)
+
+clean:
+	rm -f $(OBJECTS)
 
 fclean: clean
-	rm -f ${NAME}
+	rm -f $(TARGET)
 
-re: fcleanall
-
-.PHONY: all clean fclean re
+re: fclean all
